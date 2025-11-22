@@ -56,7 +56,7 @@ KID_2_NAME="Sebastian"
 ### 3. Run the Application
    
 Start the Streamlit application from your terminal:
-````
+```
 streamlit run 00_Main_Portal.py
 ```
 
@@ -81,11 +81,13 @@ streamlit run 00_Main_Portal.py
 To manually test a door message, use the following URL format, replacing [BASE_URL] with your HOSTING_URL_BASE, [DAY] with the door number, and [KID_ID] with the recipient's numeric ID (1 or 2).
 
 Format:
+
 ```
 [BASE_URL]/Door_Message?day=[DAY]&kid=[KID_ID]
 ```
 
 Example (Day 5 for Sue/Kid 1):
+
 ```
 http://localhost:8501/Door_Message?day=5&kid=1
 ````
