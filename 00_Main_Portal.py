@@ -5,7 +5,7 @@ import os
 # Load configuration from .env file
 load_dotenv()
 
-st.set_page_config(page_title="🎄 Main Portal", layout="wide")
+st.set_page_config(page_title="🎄 Home", layout="wide")
 
 st.markdown(
     """
@@ -31,11 +31,9 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown('<h1 class="main-title">The Secret Advent Calendar Portal</h1>', unsafe_allow_html=True)
-st.markdown('<p class="subtitle">Scan your special QR Code to reveal the secret of your door!</p>', unsafe_allow_html=True)
+st.markdown('<h1 class="main-title">Calendario de Adviento 2025</h1>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Escanea tu código QR para saber qué tienes de regalo!</p>', unsafe_allow_html=True)
 
-# Image of a simple gift box, since this is the main landing page
-# FIX: Replaced deprecated 'use_column_width=True' with 'use_container_width=True'
-st.image("https://placehold.co/800x250/F5C913/0D281A?text=Scan+Your+Door+Code", use_container_width=True)
+st.image("assets/family-portrait.png", use_container_width=True)
 
-st.sidebar.caption("Advent Calendar App")
+st.sidebar.caption("Adventskalendar App")

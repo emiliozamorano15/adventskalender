@@ -1,0 +1,146 @@
+[
+    {
+        "Date": "2025-12-01",
+        "Message_Kid1": "🤡 1 x Joker para no hacer deberes",
+        "Message_Kid2": "🤡 1 x Joker para no hacer deberes",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-02",
+        "Message_Kid1": "Sorpresa",
+        "Message_Kid2": "Sorpresa",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-03",
+        "Message_Kid1": "🚙 Te llevo a la escuela en coche",
+        "Message_Kid2": "Sorpresa",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-04",
+        "Message_Kid1": "🎥 Vamos al cine a la película que tú quieras",
+        "Message_Kid2": "💶 Felicidades! Ganaste 3€",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-05",
+        "Message_Kid1": "Sorpresa",
+        "Message_Kid2": "🍪 Hornear galletas",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-06",
+        "Message_Kid1": "🍲 Vamos a cenar a donde tú escojas",
+        "Message_Kid2": "Sorpresa",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-07",
+        "Message_Kid1": "📺 1 hora más de TV (no acumulable)",
+        "Message_Kid2": "🕹️ 1 hora  más de videojuegos (no acumulable)",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-08",
+        "Message_Kid1": "💶 Felicidades! Ganaste 3€",
+        "Message_Kid2": "📖 1 x libro de Kindle gratis",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-09",
+        "Message_Kid1": "Sorpresa",
+        "Message_Kid2": "1 x jugar el juego de mesa que tú quieras",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-10",
+        "Message_Kid1": "🔐 1 x Joker: salir de la cárcel",
+        "Message_Kid2": "🤡 1 x Joker para no hacer deberes",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-11",
+        "Message_Kid1": "🎲 1 x jugar el juego de mesa que tú quieras",
+        "Message_Kid2": "🚙 Te llevo a la escuela en coche",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-12",
+        "Message_Kid1": "🍪 Hornear galletas",
+        "Message_Kid2": "Sorpresa",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-13",
+        "Message_Kid1": "Sorpresa",
+        "Message_Kid2": "🍲 Vamos a cenar a donde tú escojas",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-14",
+        "Message_Kid1": "🔐 1 x Joker: salir de la cárcel",
+        "Message_Kid2": "🔐 1 x Joker: salir de la cárcel",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-15",
+        "Message_Kid1": "📖 1 x libro de Kindle gratis",
+        "Message_Kid2": "Sorpresa",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-16",
+        "Message_Kid1": "Sorpresa",
+        "Message_Kid2": "🎲 1 x jugar el juego de mesa que tú quieras",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-17",
+        "Message_Kid1": "🤡 1 x Joker para no hacer deberes",
+        "Message_Kid2": "🔐 1 x Joker: salir de la cárcel",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-18",
+        "Message_Kid1": "1 x jugar el juego de mesa que tú quieras",
+        "Message_Kid2": "🚙 Te llevo a la escuela en coche",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-19",
+        "Message_Kid1": "🚙 Te llevo a la escuela en coche",
+        "Message_Kid2": "🎥 Vamos al cine a la película que tú quieras",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-20",
+        "Message_Kid1": "🛀 1 x No me voy a bañar",
+        "Message_Kid2": "Vamos a pasear a donde tu quieras",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-21",
+        "Message_Kid1": "📺 1 hora más de TV (no acumulable)",
+        "Message_Kid2": "🕹️ 1 hora  más de videojuegos (no acumulable)",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-22",
+        "Message_Kid1": "💶 Felicidades! Ganaste 3€",
+        "Message_Kid2": "🛀 1 x No me voy a bañar",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-23",
+        "Message_Kid1": "Vamos a pasear a donde tu quieras",
+        "Message_Kid2": "💶 Felicidades! Ganaste 3€",
+        "Is_Active": true
+    },
+    {
+        "Date": "2025-12-24",
+        "Message_Kid1": "Sorpresa",
+        "Message_Kid2": "Sorpresa",
+        "Is_Active": true
+    }
+]
