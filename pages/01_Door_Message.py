@@ -11,11 +11,13 @@ load_dotenv()
 # --- Configuration & Data Loading ---
 # FIX: Convert env variables to integers, providing defaults if not set or invalid
 try:
+    # Use int() for CALENDAR_YEAR
     CALENDAR_YEAR = int(os.getenv("CALENDAR_YEAR", date.today().year))
 except (ValueError, TypeError):
     CALENDAR_YEAR = date.today().year
     
 try:
+    # Use int() for CALENDAR_MONTH
     CALENDAR_MONTH = int(os.getenv("CALENDAR_MONTH", 12))
 except (ValueError, TypeError):
     CALENDAR_MONTH = 12
@@ -25,7 +27,7 @@ try:
 except (ValueError, TypeError):
     MAX_DAY = 24
     
-# Check for debugging mode
+# Check for debugging mode (Robust conversion: handles 'true', 'True', '1', etc.)
 DEBUG_MODE = os.getenv("DEBUG_MODE", 'False').lower() in ('true', '1', 't')
     
 # Change DATA_FILE to point to the new JSON file
@@ -69,8 +71,14 @@ def check_access(requested_date_str):
 
     # 1. Check if it's currently the configured month and year
     configured_month_name = calendar.month_name[CALENDAR_MONTH]
-    if today.year != CALENDAR_YEAR or today.month != CALENDAR_MONTH:
-        return False, f"The Advent Calendar is configured for month {configured_month_name} of {CALENDAR_YEAR} and is not currently active."
+    # Check if the requested door date belongs to the configured calendar year/month
+    # This prevents accessing future years/months even if the day is in the past
+    
+    # We must also check that the requested date is not in the future
+    if requested_date.year != CALENDAR_YEAR or requested_date.month != CALENDAR_MONTH:
+        # If the door date is outside the configured calendar (e.g., trying to access 2026 door on a 2025 calendar)
+        return False, f"This door date ({requested_date_str}) is outside the configured {configured_month_name} {CALENDAR_YEAR} calendar."
+
 
     # 2. Check the date gate
     if today >= requested_date:
@@ -100,7 +108,7 @@ def main():
         # Standard Streamlit behavior: value is a list of strings
         requested_date_str_raw = raw_date_value[0] if raw_date_value and raw_date_value[0] else None
     elif isinstance(raw_date_value, str):
-        # Non-standard behavior (observed in your debug): value is the string itself
+        # Non-standard behavior (observed in some environments): value is the string itself
         requested_date_str_raw = raw_date_value
     else:
         requested_date_str_raw = None
@@ -222,7 +230,7 @@ def main():
             # Replaced placeholder image with the requested local file path
             st.image("./assets/family-portrait.png", 
                      caption=f"Door {requested_day} Photo", 
-                     width='stretch')
+                     use_container_width=True)
 
         with col2:
             st.markdown('<div class="message-box">', unsafe_allow_html=True)

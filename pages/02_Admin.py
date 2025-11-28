@@ -23,7 +23,10 @@ CALENDAR_YEAR = os.getenv("CALENDAR_YEAR", str(date.today().year))
 CALENDAR_MONTH = os.getenv("CALENDAR_MONTH", "12")
 HOSTING_URL_BASE = os.getenv("HOSTING_URL_BASE", "http://adventskalender2025.streamlit.app")
 
-DEBUG_MODE = os.getenv("DEBUG_MODE", 'False').lower() in ('true', '1', 't')
+# Capture the raw string value from the environment first
+RAW_DEBUG_MODE = os.getenv("DEBUG_MODE", 'False')
+# Then convert to boolean
+DEBUG_MODE = RAW_DEBUG_MODE.lower() in ('true', '1', 't')
 
 
 # --- Data Handling Functions ---
@@ -188,7 +191,8 @@ def admin_panel(initial_data):
     st.markdown(f"""
         - **HOSTING_URL_BASE (QR Code Target):** `{HOSTING_URL_BASE}`
         - **Calendar Month/Year (Gate Check):** `{CALENDAR_MONTH}/{CALENDAR_YEAR}`
-        - **Debug Mode Status:** `{DEBUG_MODE}` (Loaded as Python Boolean)
+        - **Debug Mode Status (Boolean):** `{DEBUG_MODE}`
+        - **Raw DEBUG_MODE String (from env):** `{RAW_DEBUG_MODE}`
         - **Admin Password Status:** {'Set' if ADMIN_PASSWORD else 'Not Set'}
     """)
     st.markdown("---")
@@ -217,7 +221,7 @@ def admin_panel(initial_data):
         initial_data,
         column_config=column_config,
         num_rows="dynamic",
-        width='stretch',
+        use_container_width=True,
         key="message_editor"
     )
 
@@ -293,7 +297,7 @@ def admin_panel(initial_data):
         with col_kid1:
             st.markdown(f"###### {KID_1_NAME}'s QR Code")
             qr_kid1_bytes = generate_qr_code(selected_date, 1)
-            st.image(qr_kid1_bytes, width='stretch')
+            st.image(qr_kid1_bytes, use_container_width=True)
             st.download_button(
                 label=f"Download {KID_1_NAME} Door {door_day} QR",
                 data=qr_kid1_bytes,
@@ -305,7 +309,7 @@ def admin_panel(initial_data):
         with col_kid2:
             st.markdown(f"###### {KID_2_NAME}'s QR Code")
             qr_kid2_bytes = generate_qr_code(selected_date, 2)
-            st.image(qr_kid2_bytes, width='stretch')
+            st.image(qr_kid2_bytes, use_container_width=True)
             st.download_button(
                 label=f"Download {KID_2_NAME} Door {door_day} QR",
                 data=qr_kid2_bytes,
