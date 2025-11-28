@@ -3,18 +3,26 @@ import json
 import os
 from dotenv import load_dotenv
 from datetime import date, datetime
+import qrcode # For generating QR codes
+import io # For handling in-memory files (QR codes, zip)
+import base64 # For generating download links
+import zipfile # For creating bulk download zips
+import urllib.parse # For safely encoding the URL query parameters
 
 # Load configuration from .env file
 load_dotenv()
 
 # --- Configuration ---
 DATA_FILE = "advent_messages.json"
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
-KID_1_NAME = os.getenv("KID_1_NAME", "Kid 1")
-KID_2_NAME = os.getenv("KID_2_NAME", "Kid 2")
-CALENDAR_YEAR = os.getenv("CALENDAR_YEAR", date.today().year)
-CALENDAR_MONTH = os.getenv("CALENDAR_MONTH", 12)
-# Added DEBUG_MODE for clarity, though it's primarily used in Door_Message.py
+# Using defaults based on user's config.toml for consistency, though code relies on .env
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "7623")
+KID_1_NAME = os.getenv("KID_1_NAME", "Isabel")
+KID_2_NAME = os.getenv("KID_2_NAME", "Sebastian")
+# Streamlit typically handles environment variables as strings, so we load them as such
+CALENDAR_YEAR = os.getenv("CALENDAR_YEAR", str(date.today().year))
+CALENDAR_MONTH = os.getenv("CALENDAR_MONTH", "12")
+HOSTING_URL_BASE = os.getenv("HOSTING_URL_BASE", "http://adventskalender2025.streamlit.app")
+
 DEBUG_MODE = os.getenv("DEBUG_MODE", 'False').lower() in ('true', '1', 't')
 
 
@@ -75,6 +83,42 @@ def save_data(data):
         st.error(f"Error saving JSON data: {e}")
 
 
+# --- QR Code Functions ---
+
+def get_base_url():
+    """Constructs the base URL for the Door Message page."""
+    # Ensure the URL is clean and points to the correct page path
+    base = HOSTING_URL_BASE.rstrip('/')
+    return f"{base}/Door_Message"
+
+def generate_qr_code(date_str, kid_id):
+    """Generates a QR code for a specific date and kid ID, returning image bytes."""
+    base_url = get_base_url()
+    
+    # Use urllib.parse.urlencode for safe query string construction
+    params = urllib.parse.urlencode({'date': date_str, 'kid': kid_id})
+    full_url = f"{base_url}?{params}"
+    
+    # Create QR code object
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(full_url)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    # Save image to an in-memory buffer
+    buffer = io.BytesIO()
+    img.save(buffer, format="PNG")
+    buffer.seek(0)
+    
+    return buffer.getvalue()
+
+
 # --- Authentication ---
 
 def check_password():
@@ -111,7 +155,7 @@ def check_password():
 
 # --- Main Application ---
 
-def admin_panel():
+def admin_panel(initial_data):
     """The main Streamlit admin page content."""
     st.set_page_config(page_title="🎄 Admin Panel", layout="wide")
     st.markdown(
@@ -139,12 +183,12 @@ def admin_panel():
     if DEBUG_MODE:
         st.warning("⚠️ DEBUG MODE IS ACTIVE: Time gating is disabled for users.")
 
-    # Load data from JSON file
-    initial_data = load_data()
+    
+    # --- 1. Data Editor Section ---
+    st.markdown("### 1. Message Data Editor")
     
     # Define column configurations for the editor
     column_config = {
-        # Changed from "Day" NumberColumn to "Date" TextColumn
         "Date": st.column_config.TextColumn(
             "Door Date (YYYY-MM-DD)", help="Full date for the door (e.g., 2025-12-01)", required=True
         ),
@@ -159,10 +203,7 @@ def admin_panel():
         ),
     }
 
-    st.markdown("### Message Data Editor")
-    
     # Use st.data_editor to display and allow editing of the list of dictionaries
-    # Set key to ensure data is updated correctly
     edited_data = st.data_editor(
         initial_data,
         column_config=column_config,
@@ -172,17 +213,108 @@ def admin_panel():
     )
 
     if st.button("Save Changes to JSON File"):
-        # The data editor returns a list of dictionaries (Python objects), which is what we need for JSON saving.
         save_data(edited_data)
 
     st.markdown("---")
-    st.info("Remember to keep the 'Date' column unique and sequential (YYYY-MM-DD) for the Advent Calendar to work correctly.")
+    
+    # --- 2. QR Code Generation Section ---
+    st.markdown("### 2. QR Code Generation & Download")
+    
+    # Get active doors only
+    active_doors = sorted([
+        d for d in edited_data if d.get('Is_Active', False)
+    ], key=lambda x: x.get('Date', '0000-00-00'))
+    
+    if not active_doors:
+        st.info("No active doors found in the data to generate QR codes.")
+        return
+
+    door_dates = [d['Date'] for d in active_doors]
+    
+    # --- Bulk Download Section ---
+    st.markdown("#### Bulk Download (All Active Doors)")
+    
+    @st.cache_data
+    def generate_bulk_zip(doors):
+        """Generates a zip file containing all QR codes."""
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
+            for door in doors:
+                date_str = door['Date']
+                day = date_str.split('-')[2]
+                
+                # Kid 1 QR
+                qr_kid1_bytes = generate_qr_code(date_str, 1)
+                zf.writestr(f"Door_{day}_{KID_1_NAME}_QR.png", qr_kid1_bytes)
+                
+                # Kid 2 QR
+                qr_kid2_bytes = generate_qr_code(date_str, 2)
+                zf.writestr(f"Door_{day}_{KID_2_NAME}_QR.png", qr_kid2_bytes)
+                
+        return zip_buffer.getvalue()
+
+    zip_data = generate_bulk_zip(active_doors)
+    
+    st.download_button(
+        label=f"📦 Download ZIP ({len(active_doors) * 2} QR Codes)",
+        data=zip_data,
+        file_name="advent_calendar_qrcodes.zip",
+        mime="application/zip",
+        help="Downloads a single ZIP file containing all QR codes for all active dates and both kids."
+    )
+    
+    st.markdown("#### Single Door View")
+    
+    # --- Single Door Selection and Display ---
+    selected_date = st.selectbox(
+        "Select Door Date to View QR Codes:",
+        options=door_dates,
+        index=0,
+        key="selected_qr_date"
+    )
+    
+    if selected_date:
+        door_day = selected_date.split('-')[2]
+        st.markdown(f"##### Door {door_day} ({selected_date})")
+        
+        # --- QR Code Display ---
+        col_kid1, col_kid2 = st.columns(2)
+        
+        # Kid 1
+        with col_kid1:
+            st.markdown(f"###### {KID_1_NAME}'s QR Code")
+            qr_kid1_bytes = generate_qr_code(selected_date, 1)
+            st.image(qr_kid1_bytes, use_container_width=True)
+            st.download_button(
+                label=f"Download {KID_1_NAME} Door {door_day} QR",
+                data=qr_kid1_bytes,
+                file_name=f"Door_{door_day}_{KID_1_NAME}_QR.png",
+                mime="image/png"
+            )
+
+        # Kid 2
+        with col_kid2:
+            st.markdown(f"###### {KID_2_NAME}'s QR Code")
+            qr_kid2_bytes = generate_qr_code(selected_date, 2)
+            st.image(qr_kid2_bytes, use_container_width=True)
+            st.download_button(
+                label=f"Download {KID_2_NAME} Door {door_day} QR",
+                data=qr_kid2_bytes,
+                file_name=f"Door_{door_day}_{KID_2_NAME}_QR.png",
+                mime="image/png"
+            )
+
+    st.markdown("---")
+    st.info(f"The QR codes point to the base URL: `{HOSTING_URL_BASE}`.")
 
 
 # --- Run App ---
 
 if __name__ == "__main__":
+    # Load data here so it's only loaded once before the panel runs
+    initial_data = load_data() 
     if check_password():
-        admin_panel()
+        admin_panel(initial_data)
     else:
-        st.info("Please enter the password to access the admin panel.")
+        # If password check fails, the login prompt is displayed by check_password
+        pass

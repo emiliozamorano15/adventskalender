@@ -83,11 +83,11 @@ To manually test a door message, use the following URL format, replacing [BASE_U
 Format:
 
 ```
-[BASE_URL]/Door_Message?day=[DAY]&kid=[KID_ID]
+[BASE_URL]/Door_Message?date=[YYYY-MM-DD]&kid=[KID_ID]
 ```
 
 Example (Day 5 for Sue/Kid 1):
 
 ```
-http://localhost:8501/Door_Message?day=5&kid=1
+http://localhost:8501/Door_Message?date=2025-12-05&kid=1
 ````
