@@ -221,7 +221,7 @@ def admin_panel(initial_data):
         initial_data,
         column_config=column_config,
         num_rows="dynamic",
-        use_container_width=True,
+        width='stretch',
         key="message_editor"
     )
 
@@ -297,7 +297,7 @@ def admin_panel(initial_data):
         with col_kid1:
             st.markdown(f"###### {KID_1_NAME}'s QR Code")
             qr_kid1_bytes = generate_qr_code(selected_date, 1)
-            st.image(qr_kid1_bytes, use_container_width=True)
+            st.image(qr_kid1_bytes, width='stretch')
             st.download_button(
                 label=f"Download {KID_1_NAME} Door {door_day} QR",
                 data=qr_kid1_bytes,
@@ -309,7 +309,7 @@ def admin_panel(initial_data):
         with col_kid2:
             st.markdown(f"###### {KID_2_NAME}'s QR Code")
             qr_kid2_bytes = generate_qr_code(selected_date, 2)
-            st.image(qr_kid2_bytes, use_container_width=True)
+            st.image(qr_kid2_bytes, width='stretch')
             st.download_button(
                 label=f"Download {KID_2_NAME} Door {door_day} QR",
                 data=qr_kid2_bytes,

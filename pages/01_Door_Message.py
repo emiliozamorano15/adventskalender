@@ -118,9 +118,9 @@ def main():
     # --- DEBUGGING PRINTS (Before Strip) ---
     if DEBUG_MODE:
         st.subheader("⚠️ DEBUGGING: URL Query Parameters")
-        st.code(f"Full st.query_params: {dict(query_params)}", language="python")
-        st.code(f"Raw Date Value (from .get()): {raw_date_value} (Type: {type(raw_date_value)})", language="python")
-        st.code(f"Raw Date String: '{requested_date_str_raw}' (Length: {len(requested_date_str_raw) if requested_date_str_raw else 0})", language="python")
+        # st.code(f"Full st.query_params: {dict(query_params)}", language="python")
+#         st.code(f"Raw Date Value (from .get()): {raw_date_value} (Type: {type(raw_date_value)})", language="python")
+        # st.code(f"Raw Date String: '{requested_date_str_raw}' (Length: {len(requested_date_str_raw) if requested_date_str_raw else 0})", language="python")
     # --- END DEBUGGING PRINTS ---
 
     try:
@@ -230,7 +230,7 @@ def main():
             # Replaced placeholder image with the requested local file path
             st.image("./assets/family-portrait.png", 
                      caption=f"Door {requested_day} Photo", 
-                     use_container_width=True)
+                     width='stretch')
 
         with col2:
             st.markdown('<div class="message-box">', unsafe_allow_html=True)
