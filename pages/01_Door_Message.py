@@ -221,8 +221,8 @@ def main():
         with col1:
             # Replaced placeholder image with the requested local file path
             st.image("./assets/family-portrait.png", 
-                     caption=f"December {requested_day}", 
-                     use_container_width=True)
+                     caption=f"Door {requested_day} Photo", 
+                     width='stretch')
 
         with col2:
             st.markdown('<div class="message-box">', unsafe_allow_html=True)

@@ -34,6 +34,6 @@ st.markdown(
 st.markdown('<h1 class="main-title">Calendario de Adviento 2025</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Escanea tu código QR para saber qué tienes de regalo!</p>', unsafe_allow_html=True)
 
-st.image("assets/family-portrait.png", use_container_width=True)
+st.image("assets/family-portrait.png", width='stretch')
 
 st.sidebar.caption("Adventskalendar App")

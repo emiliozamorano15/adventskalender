@@ -183,6 +183,15 @@ def admin_panel(initial_data):
     if DEBUG_MODE:
         st.warning("⚠️ DEBUG MODE IS ACTIVE: Time gating is disabled for users.")
 
+    # --- 0. Live Configuration Check ---
+    st.markdown("### 0. Live Configuration Check")
+    st.markdown(f"""
+        - **HOSTING_URL_BASE (QR Code Target):** `{HOSTING_URL_BASE}`
+        - **Calendar Month/Year (Gate Check):** `{CALENDAR_MONTH}/{CALENDAR_YEAR}`
+        - **Debug Mode Status:** `{DEBUG_MODE}` (Loaded as Python Boolean)
+        - **Admin Password Status:** {'Set' if ADMIN_PASSWORD else 'Not Set'}
+    """)
+    st.markdown("---")
     
     # --- 1. Data Editor Section ---
     st.markdown("### 1. Message Data Editor")
@@ -208,7 +217,7 @@ def admin_panel(initial_data):
         initial_data,
         column_config=column_config,
         num_rows="dynamic",
-        use_container_width=True,
+        width='stretch',
         key="message_editor"
     )
 
@@ -284,7 +293,7 @@ def admin_panel(initial_data):
         with col_kid1:
             st.markdown(f"###### {KID_1_NAME}'s QR Code")
             qr_kid1_bytes = generate_qr_code(selected_date, 1)
-            st.image(qr_kid1_bytes, use_container_width=True)
+            st.image(qr_kid1_bytes, width='stretch')
             st.download_button(
                 label=f"Download {KID_1_NAME} Door {door_day} QR",
                 data=qr_kid1_bytes,
@@ -296,7 +305,7 @@ def admin_panel(initial_data):
         with col_kid2:
             st.markdown(f"###### {KID_2_NAME}'s QR Code")
             qr_kid2_bytes = generate_qr_code(selected_date, 2)
-            st.image(qr_kid2_bytes, use_container_width=True)
+            st.image(qr_kid2_bytes, width='stretch')
             st.download_button(
                 label=f"Download {KID_2_NAME} Door {door_day} QR",
                 data=qr_kid2_bytes,
